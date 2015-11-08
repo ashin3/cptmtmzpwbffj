@@ -1,6 +1,7 @@
 ---
 applications:
   - name: college-chess-tournament
+    hostname: college-chess-tournament
     buildpack: java_buildpack
     memory: 512M
     path: build/libs/college-chess-tournament-1.0.0-SNAPSHOT.jar
