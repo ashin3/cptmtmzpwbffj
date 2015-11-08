@@ -28,6 +28,22 @@ adminLeagueCreate.controller('AdminLeagueCreateCtrl', function($rootScope, $scop
     var leagueUrlBase = "/league";
     var officialUrlBase = "/official";
 
+
+    $scope.leagueList = [];
+
+    $scope.getLeagueNameList = function() {
+        $http({
+            url:leagueUrlBase + "/findAll",
+            method: "GET"
+        }).success(function(data) {
+            for (var i=0; i<data.length; i++) {
+                $scope.leagueList.push(data[i].leagueName)
+            }
+        });
+    };
+
+    $scope.getLeagueNameList();
+
     $scope.officials = [{name:"", username:"", password:""}];
 
     $scope.addNewOfficial = function addNewOfficial() {
@@ -71,7 +87,10 @@ adminLeagueCreate.controller('AdminLeagueCreateCtrl', function($rootScope, $scop
         $scope.officials.splice(index, 1);
     };
 
+    $scope.leagueExist = false;
+
     $scope.populateLeague = function populateLeague() {
+        $scope.leagueExist = false;
         if($scope.leagueName == null || $scope.officials[0].name == "" || $scope.officials[0].username == "" || $scope.officials[0].password == "") {
             $scope.emptyResult = false;
         } else {
@@ -83,11 +102,15 @@ adminLeagueCreate.controller('AdminLeagueCreateCtrl', function($rootScope, $scop
                 }
             }
             if($scope.emptyResult) {
-                $scope.createLeague();
-                $scope.officials.forEach(function(official) {
-                    if(official.name != "" && official.username != "" && official.password != "")
-                        $scope.createOfficial(official)
-                });
+                if($scope.leagueList.indexOf($scope.leagueName) > -1) {
+                    $scope.leagueExist = true;
+                } else {
+                    $scope.createLeague();
+                    $scope.officials.forEach(function(official) {
+                        if(official.name != "" && official.username != "" && official.password != "")
+                            $scope.createOfficial(official)
+                    });
+                }
             }
         }
     }
