@@ -282,23 +282,22 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                     $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
             }
         }
-        for(var j=0; j<$scope.teamNameList.length; j++) {
-            $scope.updateTeam(leagueName, $scope.teamNameList[j], $scope.teamScoreMapList[$scope.teamNameList[j]])
-        }
+        $scope.updateTeam(leagueName, $scope.teamNameList, $scope.teamScoreMapList)
     };
 
-    $scope.updateTeam = function(leagueName, teamName, score) {
-        $http({
-            url:teamUrlBase + "/update",
-            method:"PUT",
-            params: {
-                leagueName : leagueName,
-                teamName : teamName,
-                score : score
-            }
-        }).success(function(data) {
-            $scope.MatchCreated = data;
-        });
+    $scope.updateTeam = function(leagueName, teamNameList, scoreMapList) {
+        for(var i=0;i<teamNameList.length;i++) {
+            $http({
+                url:teamUrlBase + "/update",
+                method:"PUT",
+                params: {
+                    leagueName : leagueName,
+                    teamName : teamNameList[i],
+                    score : scoreMapList[teamNameList[i]]
+                }
+            }).success(function(data) {
+            });
+        }
     };
 
     $scope.createRescheduledMatch = function(leagueName, teamNames) {
