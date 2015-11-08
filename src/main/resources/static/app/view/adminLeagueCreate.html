@@ -1,0 +1,33 @@
+<div class="container">
+    <a href="#/adminHome" class="btn btn-primary" type="button">
+        ADMIN HOME
+    </a>
+    <div class="alert alert-danger" ng-show="!emptyResult">
+        You have to enter every field.
+    </div>
+    <h2>League Name</h2>
+    <div class="row">
+        <div class="col-sm-3">
+            <input type="text" ng-model="leagueName" class="form-control" id="leagueName" placeholder="Enter League Name">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <h2>Official</h2>
+            <button class="btn btn-primary" type="button" ng-show="showAddOfficial(officials)" ng-click="addNewOfficial()">Add another official</button>
+            <div class="col-lg-16">
+                <div class="form-group" ng-repeat="official in officials">
+                    <h4> Official {{$index+1}} :
+                        <button class="btn btn-primary" ng-show="$index>0" type="button" ng-click="removeOfficial($index)">Remove</button>
+                    </h4>
+                    <label>name : </label><input type="text" ng-model="official.name" name="" placeholder="Enter a Official Name" class="form-control">
+                    <label>username : </label><input type="text" ng-model="official.username" name="" placeholder="Enter a Official Username" class="form-control">
+                    <label>password : </label><input type="text" ng-model="official.password" name="" placeholder="Enter a Official Password" class="form-control">
+                </div>
+            </div>
+        </div>
+    </div>
+    <button ng-click="populateLeague()" class="btn btn-primary" type="button">
+        CREATE LEAGUE
+    </button>
+</div>

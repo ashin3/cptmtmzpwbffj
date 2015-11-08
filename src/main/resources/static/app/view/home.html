@@ -1,0 +1,133 @@
+<div>
+    <a href="#/adminLogin" ng-show="!officialLogin" class="btn btn-primary" type="button">
+        ADMIN LOGIN
+    </a>
+    <a href="#/officialLogin" ng-show=!officialLogin class="btn btn-primary" type="button">
+        OFFICIAL LOGIN
+    </a>
+    <a href="#/home" ng-click="logoff(weekSelected)" ng-show=officialLogin class="btn btn-primary" type="button">
+        OFFICIAL LOGOFF
+    </a>
+    <div>
+        <h1>League Select:
+            <select ng-show="!officialLogin" ng-change="viewSchedule(leagueSelected, weekSelected)" ng-init="leagueSelected=leagueList[0]" ng-model="leagueSelected" ng-options=" league.leagueName for league in leagueList"></select>
+            <label ng-show="officialLogin">{{officialLeague}}</label>
+        </h1>
+        <div>
+            <h3>Tournament Date : <label ng-show="(leagueSelected != leagueList[0] && !officialLogin) || (officialLeague != null && officialLogin)">{{startDate}} ~ {{endDate}}</label>
+            </h3>
+        </div>
+    </div>
+    <div>
+        <label>Week Select:
+            <select ng-change="viewSchedule(leagueSelected, weekSelected)" ng-init="weekSelected=weekList[0]" ng-model="weekSelected" ng-options="week for week in weekList"></select>
+            <label>{{tournamentDate}}</label>
+        </label>
+    </div>
+    <button class="btn btn-primary" ng-click="viewSchedule(leagueSelected, weekSelected)">View Schedule</button>
+    <button class="btn btn-primary" ng-click="viewResult(leagueSelected)">View Rank</button>
+    <button class="btn btn-primary" ng-show="officialLogin" ng-click="populateLog()">View Logs</button>
+    <button class="btn btn-primary" ng-click="populateSchedule()" ng-show="officialLogin && !matchPopulated">Configure Match</button>
+    <button class="btn btn-primary" ng-click="updateSchedule()" ng-show="officialLogin && matchPopulated && !startDatePassed">Edit Match</button>
+    <div class="alert alert-danger" ng-show="emptyResult">
+        You have to enter every result.
+    </div>
+    <div class="col-xs-12">
+        <table ng-show="logList.length > 0 && viewLog" width="100%">
+            <thead>
+            <th>
+                Date
+            </th>
+            <th>
+                Official Name
+            </th>
+            <th>
+                Activity
+            </th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="log in logList">
+                <td>
+                    {{log.date}}
+                </td>
+                <td>
+                    {{log.officialName}}
+                </td>
+                <td>
+                    {{log.activity}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table ng-show="teamList.length > 0 && !viewMatch && !viewLog" width="100%">
+            <thead>
+            <th>
+                Team Name
+            </th>
+            <th>
+                Score
+            </th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="team in teamList">
+                <td>
+                    {{team.teamName}}
+                </td>
+                <td>
+                    {{team.score}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table ng-show="matchList.length > 0 && viewMatch && !viewLog" width="100%">
+            <thead>
+            <th>
+                Week
+            </th>
+            <th>
+                Time
+            </th>
+            <th>
+                Team1
+            </th>
+            <th>
+                Team2
+            </th>
+            <th>
+                Result
+            </th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="match in matchList">
+                <td>
+                    {{match.week}}
+                </td>
+                <td>
+                    {{match.timeOfDay}}
+                </td>
+                <td>
+                    {{match.teamName1}}
+                </td>
+                <td>
+                    {{match.teamName2}}
+                </td>
+                <td>
+                    <select ng-change="updateMatchDTO(resultOptions, match)" ng-show="officialLogin && !resultConfirm && validateDate" ng-model="resultOptions">
+                        <option>{{match.teamName1}}</option>
+                        <option>{{match.teamName2}}</option>
+                        <option value="Tied">Tied</option>
+                        <option ng-show = "weekSelected < 7" value="Reschedule">Reschedule</option>
+                    </select>
+                    <div ng-show="!officialLogin || resultConfirm">
+                        {{match.result}}
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <button ng-show="viewMatch && officialLogin && !resultConfirm && matchList.length > 0 && !viewLog && validateDate" class="btn btn-primary" ng-click="updateResult(matchList, weekSelected)">Confirm Matches</button>
+    </div>
+</div>

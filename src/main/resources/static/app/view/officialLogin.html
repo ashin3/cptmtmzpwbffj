@@ -1,0 +1,24 @@
+<a href="#/home" class="btn btn-primary" type="button">
+    HOME
+</a>
+<div class="alert alert-danger" ng-show="error">
+    There was a problem logging in. Please try again.
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <label>League Select:
+            <select ng-init="leagueSelected=leagueList[0]" ng-model="leagueSelected" ng-options=" league.leagueName for league in leagueList"></select>
+        </label>
+    </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+<form role="form">
+    <div class="form-group">
+        <label for="username">Official ID:</label>
+        <input type="text" class="form-control" id="username" name="username" ng-model="officials.username" required/>
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password"class="form-control" id="password" name="password" ng-model="officials.password" required/>
+    </div>
+    <button type="submit" class="btn btn-primary" ng-click=officialIdCheck(officials,leagueSelected)>Login</button>
+</form>

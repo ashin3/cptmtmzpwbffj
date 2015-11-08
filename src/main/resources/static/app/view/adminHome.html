@@ -1,0 +1,67 @@
+<div class="container">
+    <a href="#/home" ng-click=logoff() class="btn btn-primary" type="button">
+        ADMIN LOGOFF
+    </a>
+    <a href="#/adminLeagueCreate" class="btn btn-primary" type="button">
+        CREATE LEAGUE
+    </a>
+    <div>
+        <h1>League Select:
+            <select ng-change="showLeagueInfo(leagueSelected)" ng-init="leagueSelected=leagueList[0]" ng-model="leagueSelected" ng-options=" league.leagueName for league in leagueList"></select>
+        </h1>
+    </div>
+    <div class="row" ng-show="leagueSelected==leagueList[0]">
+        <h3>Please Select League to View Info</h3>
+    </div>
+    <div class="row" ng-show="leagueSelected!=leagueList[0]">
+        <div class="col-lg-16">
+            <h3>Tournament Date :</h3>
+            <div class="col-lg-16">
+                <div>
+                    <div><label>startDate : {{startDate}}</label></div>
+                    <div><label>endDate : {{endDate}}</label></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-16">
+            <h3>Teams :</h3>
+            <div class="col-lg-16">
+                <div ng-repeat="team in teams">
+                    <label>name : {{team.teamName}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-16">
+            <h3>Officials :</h3>
+            <button class="btn btn-primary" ng-show="validDate && !editMode" ng-click="startUpdate()">Edit Officials</button>
+            <button class="btn btn-primary" ng-show="validDate && editMode" ng-click="updateOfficial(leagueSelected)">Update Officials</button>
+            <button class="btn btn-primary" ng-show="validDate && editMode" ng-click="cancelUpdate()">Cancel</button>
+            <div class="col-lg-16">
+                <div ng-repeat="official in officials" ng-show="!editMode">
+                    <h4> Official {{$index+1}} : </h4>
+                    <div><label>name : {{official.officialName}}</label></div>
+                    <div><label>username : {{official.officialUsername}}</label></div>
+                    <div><label>password : {{official.officialPassword}}</label></div>
+                </div>
+                <div ng-show="editMode">
+                    <div>
+                        <button class="btn btn-primary" type="button" ng-show="showAddOfficial(officialList)" ng-click="addNewOfficial()">Add another official</button>
+                    </div>
+                    <div class="alert alert-danger" ng-show="!emptyResult">
+                        You have to create at least one official.
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group" ng-repeat="official in officialList">
+                            <h4> Official {{$index+1}} :
+                                <button class="btn btn-primary" ng-show="$index>0" type="button" ng-click="removeOfficial($index)">Remove</button>
+                            </h4>
+                            <label>name : </label><input type="text" ng-model="official.name" value="official.name" class="form-control">
+                            <label>username : </label><input type="text" ng-model="official.username" value="official.username" class="form-control">
+                            <label>password : </label><input type="text" ng-model="official.password" value="official.password" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

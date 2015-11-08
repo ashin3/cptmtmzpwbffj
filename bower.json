@@ -1,0 +1,29 @@
+{
+  "name": "angularjs-springboot-basic",
+  "version": "0.0.1-SNAPSHOT",
+  "authors": [
+    "Zoltan Altfatter <altfatterz@gmail.com>"
+  ],
+  "description": "AngularJS with Spring Boot using Gradle and Bower",
+  "license": "ASL",
+  "homepage": "http://altfatterz.blogspot.nl/",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.4.7",
+    "angular-mocks": "1.4.7",
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.1.1",
+    "angular-ui-router": "~0.2",
+    "angular-route": "1.4.7",
+    "angular-resource": "1.4.7",
+    "angular-animate": "1.4.7",
+    "angular-cookies": "1.4.7"
+  }
+}
