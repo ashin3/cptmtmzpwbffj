@@ -128,7 +128,7 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
             $scope.updateLeague();
             var from = $scope.startDate.split("/");
             if(from[2].length == 4 && from[1].length ==2 && from[0].length ==2) {
-                var f = new Date(from[2], from[1] - 1, from[0]);
+                var f = new Date(from[1], from[2] - 1, from[0]);
                 var today = new Date();
                 if(isNaN( f.getTime())) {
                     $scope.dateError = false;
