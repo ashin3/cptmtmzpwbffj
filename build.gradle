@@ -10,11 +10,12 @@ buildscript {
     }
 }
 
+apply plugin: 'war'
 apply plugin: 'java'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'angularjs-sprinboot-basic'
+    baseName = 'college-chess-tournament'
     version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
