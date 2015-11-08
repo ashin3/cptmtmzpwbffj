@@ -88,6 +88,7 @@ adminHome.controller('adminHomeCtrl', function($rootScope, $scope, $http, $cooki
 
     $scope.getOfficialInfo = function(leagueSelected) {
         $scope.officials = [];
+        $scope.officialList = [];
         $http({
             url:officialUrlBase + "/findByLeagueName",
             method: "GET",
@@ -96,9 +97,7 @@ adminHome.controller('adminHomeCtrl', function($rootScope, $scope, $http, $cooki
             }
         }).success(function(data) {
             for(var i=0; i<data.length; i++) {
-                $scope.officials = [];
                 $scope.officials.push(data[i]);
-                $scope.officialList = [];
                 $scope.officialList.push({name:data[i].officialName, username:data[i].officialUsername, password:data[i].officialPassword})
             }
         })
@@ -130,7 +129,6 @@ adminHome.controller('adminHomeCtrl', function($rootScope, $scope, $http, $cooki
             }
         }).success(function() {
             $scope.editMode = false;
-            $scope.showLeagueInfo(leagueSelected);
         });
     };
 
@@ -174,6 +172,7 @@ adminHome.controller('adminHomeCtrl', function($rootScope, $scope, $http, $cooki
                 });
             }
         }
+        $scope.showLeagueInfo(leagueSelected);
     };
 
     $scope.logoff = function() {

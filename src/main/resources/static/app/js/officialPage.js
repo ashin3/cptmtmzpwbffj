@@ -128,7 +128,7 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
             $scope.updateLeague();
             var from = $scope.startDate.split("/");
             if(from[2].length == 4 && from[1].length ==2 && from[0].length ==2) {
-                var f = new Date(from[1], from[2] - 1, from[0]);
+                var f = new Date(from[2], from[0] - 1, from[1]);
                 var today = new Date();
                 if(isNaN( f.getTime())) {
                     $scope.dateError = false;
@@ -181,21 +181,34 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
             $scope.emptyResult = false;
             $scope.dateError = true;
         } else {
-            $scope.deleteTeamByLeagueName();
-            $scope.deleteMatchByLeagueName();
+            $scope.emptyResult = true;
             $scope.dateError = true;
             $scope.updateLeague();
-            if($scope.updateSucceed) {
-                $scope.teams.forEach(function(team) {
-                    if(team.name != "")
-                        teamNames.push(team.name)
-                });
-                $scope.teams.forEach(function(team) {
-                    if(team.name != "")
-                        $scope.createTeam(team)
-                });
-                $scope.createMatch(teamNames);
-                teamNames = [];
+            var from = $scope.startDate.split("/");
+            if(from[2].length == 4 && from[1].length ==2 && from[0].length ==2) {
+                var f = new Date(from[2], from[0] - 1, from[1]);
+                var today = new Date();
+                if(isNaN( f.getTime())) {
+                    $scope.dateError = false;
+                } else {
+                    if(f.getTime() < today.getTime()) {
+                        $scope.dateError = false;
+                    } else {
+                        $scope.deleteTeamByLeagueName();
+                        $scope.deleteMatchByLeagueName();
+                        $scope.updateLeague();
+                        $scope.teams.forEach(function(team) {
+                            if(team.name != "")
+                                teamNames.push(team.name)
+                        });
+                        $scope.teams.forEach(function(team) {
+                            if(team.name != "")
+                                $scope.createTeam(team)
+                        });
+                        $scope.createMatch(teamNames);
+                        teamNames = [];
+                    }
+                }
             } else {
                 $scope.dateError = false;
             }
