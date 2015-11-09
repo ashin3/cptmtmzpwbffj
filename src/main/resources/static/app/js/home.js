@@ -34,8 +34,10 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
 
     $scope.leagueList = [new League("Select")];
     $scope.viewingSchedule = true;
+    $scope.validateDate = false;
     $scope.teamList = [];
 
+    $scope.resultConfirm = false;
 
     $scope.weekList = [1,2,3,4,5,6,7,8];
 
@@ -166,12 +168,11 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                 $scope.resultView = false;
                 $scope.matchList = [];
                 $scope.emptyResult = false;
+                $scope.resultConfirm = true;
                 for (var i=0; i<data.length; i++) {
                     $scope.matchList.push(data[i]);
                     if(data[i].result == null) {
                         $scope.resultConfirm = false;
-                    } else {
-                        $scope.resultConfirm = true;
                     }
                 }
                 $scope.createTeamScoreList(weekSelected);
