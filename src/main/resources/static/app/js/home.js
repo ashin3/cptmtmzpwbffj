@@ -37,6 +37,10 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
     $scope.validateDate = false;
     $scope.teamList = [];
 
+    $scope.sortType = "score";
+    $scope.sortReverse = true;
+    $scope.searchScore = "";
+
     $scope.resultConfirm = false;
 
     $scope.weekList = [1,2,3,4,5,6,7,8];
@@ -245,7 +249,6 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
     else
         $scope.getLeagueNameList();
 
-
     $scope.viewResult = function(leagueSelected, weekSelected) {
         if(!$rootScope.officialLogin) {
             $http({
@@ -421,7 +424,7 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                         $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 1;
                     } else {
                         $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
-                        $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
+                        $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.weeklyScoreMapList[matchList[i].teamName1] + 1;
                     }
                 } else if(matchList[i].result == "Reschedule") {
                     $scope.teamNameListForReschedule = [matchList[i].teamName1, matchList[i].teamName2];

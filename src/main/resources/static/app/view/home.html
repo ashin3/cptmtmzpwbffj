@@ -67,7 +67,7 @@
             </th>
             </thead>
             <tbody>
-            <tr ng-repeat="team in teamList">
+            <tr ng-repeat="team in teamList | orderBy:sortType:sortReverse | filter:searchScore">
                 <td>
                     {{team.teamName}}
                 </td>
@@ -87,7 +87,7 @@
             </th>
             </thead>
             <tbody>
-            <tr ng-repeat="team in teamScoreList">
+            <tr ng-repeat="team in teamScoreList | orderBy:sortType:sortReverse | filter:searchScore">
                 <td>
                     {{team.teamName}}
                 </td>
