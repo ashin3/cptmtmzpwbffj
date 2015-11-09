@@ -39,7 +39,7 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
 
     $scope.weekList = [1,2,3,4,5,6,7,8];
 
-    $scope.createTeamScoreList = function() {
+    $scope.createTeamScoreList = function(weekSelected) {
         $http({
             url:teamUrlBase + "/findByLeagueName",
             method: "GET",
@@ -52,7 +52,32 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
             $scope.teamNameList = [];
             for (var i=0; i<data.length; i++) {
                 $scope.teamScoreMapList[data[i].teamName] = data[i].score;
-                $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                switch(weekSelected) {
+                    case 1:
+                        $scope.weeklyScoreMapList[data[i].teamName] = data[i].week1;
+                        break;
+                    case 2:
+                        $scope.weeklyScoreMapList[data[i].teamName] = data[i].week2;
+                        break;
+                    case 3:
+                        $scope.weeklyScoreMapList[data[i].teamName] = data[i].week3;
+                        break;
+                    case 4:
+                        $scope.weeklyScoreMapList[data[i].teamName] = data[i].week4;
+                        break;
+                    case 5:
+                        $scope.weeklyScoreMapList[data[i].teamName] = data[i].week5;
+                        break;
+                    case 6:
+                        $scope.weeklyScoreMapList[data[i].teamName] = data[i].week6;
+                        break;
+                    case 7:
+                        $scope.weeklyScoreMapList[data[i].teamName] = data[i].week7;
+                        break;
+                    case 8:
+                        $scope.weeklyScoreMapList[data[i].teamName] = data[i].week8;
+                        break;
+                }
                 $scope.teamNameList.push(data[i].teamName);
             }
         })
@@ -149,7 +174,7 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                         $scope.resultConfirm = true;
                     }
                 }
-                $scope.createTeamScoreList();
+                $scope.createTeamScoreList(weekSelected);
             });
             $http({
                 url: leagueUrlBase + "/getStartDateByLeagueName",
