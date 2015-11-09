@@ -384,23 +384,19 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
             if(matchList[i].result == "Tied") {
                 $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 3;
                 $scope.teamScoreMapList[matchList[i].teamName2] = $scope.teamScoreMapList[matchList[i].teamName2] + 3;
-                $scope.weeklyScoreMapList[matchList[i].teamName1] = 3;
-                $scope.weeklyScoreMapList[matchList[i].teamName2] = 3;
+                $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.weeklyScoreMapList[matchList[i].teamName1] + 3;
+                $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 3;
             } else if(matchList[i].result == matchList[i].teamName1 || matchList[i].result == matchList[i].teamName2) {
                 $scope.teamScoreMapList[matchList[i].result] = $scope.teamScoreMapList[matchList[i].result] + 5;
-                $scope.weeklyScoreMapList[matchList[i].result] = 5;
+                $scope.weeklyScoreMapList[matchList[i].result] = $scope.weeklyScoreMapList[matchList[i].result] + 5;
                 if(matchList[i].result == matchList[i].teamName1) {
                     $scope.teamScoreMapList[matchList[i].teamName2] = $scope.teamScoreMapList[matchList[i].teamName2] + 1;
-                    $scope.weeklyScoreMapList[matchList[i].teamName2] = 1;
+                    $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 1;
                 } else {
                     $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
                     $scope.weeklyScoreMapList[matchList[i].teamName1] = 1;
                 }
             } else if(matchList[i].result == "Reschedule") {
-                $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 0;
-                $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 0;
-                $scope.weeklyScoreMapList[matchList[i].teamName1] = 0;
-                $scope.weeklyScoreMapList[matchList[i].teamName2] = 0;
                 $scope.teamNameListForReschedule = [matchList[i].teamName1, matchList[i].teamName2];
                 $http({
                     url: matchUrlBase + "/rescheduleMatch",
