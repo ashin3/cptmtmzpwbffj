@@ -127,7 +127,7 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
             $scope.dateError = true;
             $scope.updateLeague();
             var from = $scope.startDate.split("/");
-            if(from[2].length == 4 && from[1].length ==2 && from[0].length ==2) {
+            if(from.length==3 && from[0] != null && from[1] != null && from[2] != null && from[2].length == 4 && from[1].length ==2 && from[0].length ==2) {
                 var f = new Date(from[2], from[0] - 1, from[1]);
                 var today = new Date();
                 if(isNaN( f.getTime())) {
@@ -185,7 +185,7 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
             $scope.dateError = true;
             $scope.updateLeague();
             var from = $scope.startDate.split("/");
-            if(from[2].length == 4 && from[1].length ==2 && from[0].length ==2) {
+            if(from.length==3 && from[0] != null && from[1] != null && from[2] != null && from[2].length == 4 && from[1].length ==2 && from[0].length ==2) {
                 var f = new Date(from[2], from[0] - 1, from[1]);
                 var today = new Date();
                 if(isNaN( f.getTime())) {
