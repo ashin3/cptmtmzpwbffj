@@ -64,7 +64,7 @@
             </div>
         </div>
         <div>
-            <button class="btn btn-primary" ng-show="!readyToDelete" ng-click="confirmDelete()">DELETE LEAGUE</button>
+            <button class="btn btn-primary" ng-show="!readyToDelete && !editMode" ng-click="confirmDelete()">DELETE LEAGUE</button>
             <button class="btn btn-primary" ng-show="readyToDelete" ng-click="deleteLeague(leagueSelected)">CONFIRM DELETE</button>
             <button class="btn btn-primary" ng-show="readyToDelete" ng-click="cancelDelete()">CANCEL DELETE</button>
         </div>
