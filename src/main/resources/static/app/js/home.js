@@ -406,31 +406,33 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
 
     $scope.updateScore = function(leagueName, matchList, weekSelected) {
         for(var i=0; i<matchList.length; i++) {
-            if(matchList[i].result == "Tied") {
-                $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 3;
-                $scope.teamScoreMapList[matchList[i].teamName2] = $scope.teamScoreMapList[matchList[i].teamName2] + 3;
-                $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.weeklyScoreMapList[matchList[i].teamName1] + 3;
-                $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 3;
-            } else if(matchList[i].result == matchList[i].teamName1 || matchList[i].result == matchList[i].teamName2) {
-                $scope.teamScoreMapList[matchList[i].result] = $scope.teamScoreMapList[matchList[i].result] + 5;
-                $scope.weeklyScoreMapList[matchList[i].result] = $scope.weeklyScoreMapList[matchList[i].result] + 5;
-                if(matchList[i].result == matchList[i].teamName1) {
-                    $scope.teamScoreMapList[matchList[i].teamName2] = $scope.teamScoreMapList[matchList[i].teamName2] + 1;
-                    $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 1;
-                } else {
-                    $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
-                    $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
-                }
-            } else if(matchList[i].result == "Reschedule") {
-                $scope.teamNameListForReschedule = [matchList[i].teamName1, matchList[i].teamName2];
-                $http({
-                    url: matchUrlBase + "/rescheduleMatch",
-                    method:"POST",
-                    params: {
-                        leagueName : leagueName,
-                        teamNames : $scope.teamNameListForReschedule
+            if(!matchList[i].confirmed) {
+                if(matchList[i].result == "Tied") {
+                    $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 3;
+                    $scope.teamScoreMapList[matchList[i].teamName2] = $scope.teamScoreMapList[matchList[i].teamName2] + 3;
+                    $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.weeklyScoreMapList[matchList[i].teamName1] + 3;
+                    $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 3;
+                } else if(matchList[i].result == matchList[i].teamName1 || matchList[i].result == matchList[i].teamName2) {
+                    $scope.teamScoreMapList[matchList[i].result] = $scope.teamScoreMapList[matchList[i].result] + 5;
+                    $scope.weeklyScoreMapList[matchList[i].result] = $scope.weeklyScoreMapList[matchList[i].result] + 5;
+                    if(matchList[i].result == matchList[i].teamName1) {
+                        $scope.teamScoreMapList[matchList[i].teamName2] = $scope.teamScoreMapList[matchList[i].teamName2] + 1;
+                        $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 1;
+                    } else {
+                        $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
+                        $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
                     }
-                });
+                } else if(matchList[i].result == "Reschedule") {
+                    $scope.teamNameListForReschedule = [matchList[i].teamName1, matchList[i].teamName2];
+                    $http({
+                        url: matchUrlBase + "/rescheduleMatch",
+                        method:"POST",
+                        params: {
+                            leagueName : leagueName,
+                            teamNames : $scope.teamNameListForReschedule
+                        }
+                    });
+                }
             }
         }
         $scope.updateTeam(leagueName, $scope.teamNameList, $scope.teamScoreMapList, $scope.weeklyScoreMapList, weekSelected)
