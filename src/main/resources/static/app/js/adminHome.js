@@ -38,6 +38,10 @@ adminHome.controller('adminHomeCtrl', function($rootScope, $scope, $http, $cooki
         $scope.readyToDelete = true;
     };
 
+    $scope.cancelDelete = function() {
+        $scope.readyToDelete = false;
+    };
+
     $scope.getLeagueNameList = function() {
         $http({
             url:leagueUrlBase + "/findAll",
