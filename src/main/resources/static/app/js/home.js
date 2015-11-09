@@ -419,7 +419,7 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                     $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 1;
                 } else {
                     $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
-                    $scope.weeklyScoreMapList[matchList[i].teamName1] = 1;
+                    $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
                 }
             } else if(matchList[i].result == "Reschedule") {
                 $scope.teamNameListForReschedule = [matchList[i].teamName1, matchList[i].teamName2];
