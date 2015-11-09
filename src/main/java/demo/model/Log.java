@@ -42,7 +42,7 @@ public class Log {
     }
 
     private String getParsedDateFromDate(Date date) {
-        String pattern = "MM/dd/yyyy hh:mm:ss aaa";
+        String pattern = "MM/dd/yyyy hh:mm:ss aaa zzz";
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         return format.format(date);
     }
