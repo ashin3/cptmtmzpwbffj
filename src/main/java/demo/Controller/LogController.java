@@ -27,9 +27,53 @@ public class LogController {
         return logDao.findAllLogsByLeagueName(leagueName.replace("\"", ""));
     }
 
-    @RequestMapping(value = "/create")
+    @RequestMapping(value = "/createMatchLog")
     @ResponseBody
-    public void createOfficial(@RequestParam String leagueName, String officialName, String activity) {
-        Log log = new Log(leagueName, officialName, activity);
+    public void createMatchLog(@RequestParam String leagueName,
+                            String officialName,
+                            String teamName1,
+                            String teamName2,
+                            int week) {
+        String activity;
+        Log log;
+        activity = "Confirmed Week " + week + " Match for " + teamName1 + " : " + teamName2;
+        log = new Log(leagueName, officialName, activity);
         logDao.save(log);
-    }}
+    }
+
+    @RequestMapping(value = "/deleteByLeagueName")
+    @ResponseBody
+    public void deleteByLeagueName(@RequestParam String leagueName) {
+        List<Log> logList = logDao.findAllLogsByLeagueName(leagueName);
+        logDao.deleteInBatch(logList);
+    }
+
+    @RequestMapping(value = "/createLog")
+    @ResponseBody
+    public void createLog(@RequestParam String leagueName,
+                               String officialName,
+                               String logType) {
+        String activity;
+        Log log;
+        switch (logType) {
+            case "CONFIGURE": {
+                activity = "Configured Match";
+                log = new Log(leagueName, officialName, activity);
+                logDao.save(log);
+                break;
+            }
+            case "EDIT": {
+                activity = "Edited Match";
+                log = new Log(leagueName, officialName, activity);
+                logDao.save(log);
+                break;
+            }
+            case "LOGIN": {
+                activity = "Logged In";
+                log = new Log(leagueName, officialName, activity);
+                logDao.save(log);
+                break;
+            }
+        }
+    }
+}

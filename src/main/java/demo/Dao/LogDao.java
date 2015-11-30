@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 public interface LogDao extends JpaRepository<Log, Long>{
 
-    @Query(value = "SELECT x FROM Log x WHERE x.leagueName= :leagueName")
+    @Query(value = "SELECT x FROM Log x WHERE x.leagueName= :leagueName ORDER BY x.date DESC")
     List<Log> findAllLogsByLeagueName(@Param("leagueName") String leagueName);
 
 }

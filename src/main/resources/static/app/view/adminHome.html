@@ -63,5 +63,9 @@
                 </div>
             </div>
         </div>
+        <div>
+            <button class="btn btn-primary" ng-show="!readyToDelete" ng-click="confirmDelete()">DELETE LEAGUE</button>
+            <button class="btn btn-primary" ng-show="readyToDelete" ng-click="deleteLeague(leagueSelected)">CONFIRM DELETE</button>
+        </div>
     </div>
 </div>

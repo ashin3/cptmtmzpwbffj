@@ -29,9 +29,36 @@ public class TeamController {
 
     @RequestMapping(value = "/update")
     @ResponseBody
-    public void updateTeam(@RequestParam String leagueName, String teamName, int score) {
+    public void updateTeam(@RequestParam String leagueName, String teamName, int score, int weeklyScore, int week) {
         Team team = teamDao.findByLeagueNameAndTeamName(leagueName.replace("\"", ""), teamName.replace("\"", ""));
         team.setScore(score);
+        switch (week) {
+            case 1:
+                team.setWeek1(weeklyScore);
+                break;
+            case 2:
+                team.setWeek2(weeklyScore);
+                break;
+            case 3:
+                team.setWeek3(weeklyScore);
+                break;
+            case 4:
+                team.setWeek4(weeklyScore);
+                break;
+            case 5:
+                team.setWeek5(weeklyScore);
+                break;
+            case 6:
+                team.setWeek6(weeklyScore);
+                break;
+            case 7:
+                team.setWeek7(weeklyScore);
+                break;
+            case 8:
+                team.setWeek8(weeklyScore);
+                break;
+        }
+
         teamDao.save(team);
     }
 

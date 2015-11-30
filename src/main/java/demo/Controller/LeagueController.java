@@ -59,6 +59,12 @@ public class LeagueController {
         return leagueDao.findByLeagueName(leagueName);
     }
 
+    @RequestMapping(value = "/deleteByLeagueName")
+    @ResponseBody
+    private void deleteByLeagueName(@RequestParam String leagueName) {
+        leagueDao.delete(leagueDao.findByLeagueName(leagueName));
+    }
+
     private Date getParsedDateFromString(String date) throws ParseException{
         String pattern = "MM/dd/yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern);

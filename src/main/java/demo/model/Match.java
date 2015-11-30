@@ -37,6 +37,9 @@ public class Match {
 
     private String result;
 
+    @NotNull
+    private Boolean confirmed;
+
     public Match() {}
 
     public Match(String leagueName, TimeOfDay timeOfDay, int week, String teamName1, String teamName2) {
@@ -46,5 +49,6 @@ public class Match {
         this.week = week;
         this.teamName1 = teamName1;
         this.teamName2 = teamName2;
+        this.confirmed = false;
     }
 }

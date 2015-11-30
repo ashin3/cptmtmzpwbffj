@@ -25,11 +25,18 @@ adminHome.controller('adminHomeCtrl', function($rootScope, $scope, $http, $cooki
     var leagueUrlBase = "/league";
     var teamUrlBase = "/team";
     var officialUrlBase = "/official";
+    var matchUrlBase = "/match";
+    var logUrlBase = "/log";
 
     $rootScope.adminLogin = $cookieStore.get('adminLogin');
     $scope.leagueList = [new League("Select")];
     $scope.officialList = [];
     $scope.emptyResult = true;
+    $scope.readyToDelete = false;
+
+    $scope.confirmDelete = function() {
+        $scope.readyToDelete = true;
+    };
 
     $scope.getLeagueNameList = function() {
         $http({
@@ -173,6 +180,58 @@ adminHome.controller('adminHomeCtrl', function($rootScope, $scope, $http, $cooki
             }
         }
         $scope.showLeagueInfo(leagueSelected);
+    };
+
+    $scope.deleteTeamByLeagueName = function deleteTeamByLeagueName(leagueSelected) {
+        $http({
+            url: teamUrlBase + "/deleteByLeagueName",
+            method: "PUT",
+            params: {
+                leagueName: leagueSelected.leagueName
+            }
+        })
+    };
+
+    $scope.deleteMatchByLeagueName = function deleteMatchByLeagueName(leagueSelected) {
+        $http({
+            url: matchUrlBase + "/deleteByLeagueName",
+            method: "PUT",
+            params: {
+                leagueName: leagueSelected.leagueName
+            }
+        })
+    };
+
+    $scope.deleteLogByLeagueName = function deleteLogByLeagueName(leagueSelected) {
+        $http({
+            url: logUrlBase + "/deleteByLeagueName",
+            method: "PUT",
+            params: {
+                leagueName: leagueSelected.leagueName
+            }
+        })
+    };
+
+    $scope.deleteLeagueInfo = function deleteLeagueInfo(leagueSelected) {
+        $http({
+            url: leagueUrlBase + "/deleteByLeagueName",
+            method: "PUT",
+            params: {
+                leagueName: leagueSelected.leagueName
+            }
+        })
+    };
+
+    $scope.deleteLeague =function(leagueSelected) {
+        $scope.deleteLeagueInfo(leagueSelected);
+        $scope.deleteOfficials(leagueSelected);
+        $scope.deleteMatchByLeagueName(leagueSelected);
+        $scope.deleteTeamByLeagueName(leagueSelected);
+        $scope.deleteLogByLeagueName(leagueSelected);
+        $scope.readyToDelete = false;
+        $scope.leagueList = [new League("Select")];
+        $scope.getLeagueNameList();
+        $scope.leagueSelected = $scope.leagueList[0];
     };
 
     $scope.logoff = function() {

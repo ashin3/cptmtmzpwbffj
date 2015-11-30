@@ -23,6 +23,7 @@ officialLogin.config(function config($stateProvider) {
 officialLogin.controller('OfficialLoginCtrl', function($rootScope, $scope, $http, $location, $cookieStore) {
     var leagueUrlBase = "/league";
     var officialUrlBase = "/official";
+    var logUrlBase = "/log";
 
     $scope.leagueList = [new League("Select")];
     $scope.error = false;
@@ -57,6 +58,7 @@ officialLogin.controller('OfficialLoginCtrl', function($rootScope, $scope, $http
                     $rootScope.officialName = $cookieStore.get('officialName');
                     $rootScope.officialLogin = $cookieStore.get('officialLogin');
                     $rootScope.officialLeague = $cookieStore.get('officialLeague');
+                    $scope.createLog();
                 } else {
                     $scope.error = true;
                 }
@@ -64,6 +66,18 @@ officialLogin.controller('OfficialLoginCtrl', function($rootScope, $scope, $http
         } else {
             $scope.error = true;
         }
+    };
+
+    $scope.createLog = function() {
+        $http({
+            url: logUrlBase + "/createLog",
+            method:"POST",
+            params: {
+                leagueName : $rootScope.officialLeague,
+                officialName : $rootScope.officialName,
+                logType : "LOGIN"
+            }
+        })
     };
 
 });

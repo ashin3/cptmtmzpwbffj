@@ -33,6 +33,7 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
     var leagueUrlBase = "/league";
     var teamUrlBase = "/team";
     var matchUrlBase = "/match";
+    var logUrlBase = "/log";
 
     $scope.emptyTeamList = [{name:""}, {name:""}];
     $scope.teamList = [];
@@ -147,6 +148,7 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
                         });
                         $scope.createMatch(teamNames);
                         teamNames = [];
+                        $scope.createLog("CONFIGURE");
                     }
                 }
             } else {
@@ -207,6 +209,7 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
                         });
                         $scope.createMatch(teamNames);
                         teamNames = [];
+                        $scope.createLog("EDIT");
                     }
                 }
             } else {
@@ -214,4 +217,16 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
             }
         }
     }
+
+    $scope.createLog = function(logType) {
+        $http({
+            url: logUrlBase + "/createLog",
+            method:"POST",
+            params: {
+                leagueName : $rootScope.officialLeague,
+                officialName : $rootScope.officialName,
+                logType : logType
+            }
+        })
+    };
 });

@@ -10,7 +10,7 @@
     </a>
     <div>
         <h1>League Select:
-            <select ng-show="!officialLogin" ng-change="viewSchedule(leagueSelected, weekSelected)" ng-init="leagueSelected=leagueList[0]" ng-model="leagueSelected" ng-options=" league.leagueName for league in leagueList"></select>
+            <select ng-show="!officialLogin" ng-change="generateView(leagueSelected, weekSelected)" ng-init="leagueSelected=leagueList[0]" ng-model="leagueSelected" ng-options=" league.leagueName for league in leagueList"></select>
             <label ng-show="officialLogin">{{officialLeague}}</label>
         </h1>
         <div>
@@ -20,18 +20,16 @@
     </div>
     <div>
         <label>Week Select:
-            <select ng-change="viewSchedule(leagueSelected, weekSelected)" ng-init="weekSelected=weekList[0]" ng-model="weekSelected" ng-options="week for week in weekList"></select>
+            <select ng-change="generateView(leagueSelected, weekSelected)" ng-init="weekSelected=weekList[0]" ng-model="weekSelected" ng-options="week for week in weekList"></select>
             <label>{{tournamentDate}}</label>
         </label>
     </div>
     <button class="btn btn-primary" ng-click="viewSchedule(leagueSelected, weekSelected)">View Schedule</button>
-    <button class="btn btn-primary" ng-click="viewResult(leagueSelected)">View Rank</button>
+    <button class="btn btn-primary" ng-click="viewResult(leagueSelected, weekSelected)">View Weekly Rank</button>
+    <button class="btn btn-primary" ng-click="viewCurrentResult(leagueSelected)">View Current Rank</button>
     <button class="btn btn-primary" ng-show="officialLogin" ng-click="populateLog()">View Logs</button>
     <button class="btn btn-primary" ng-click="populateSchedule()" ng-show="officialLogin && !matchPopulated">Configure Match</button>
     <button class="btn btn-primary" ng-click="updateSchedule()" ng-show="officialLogin && matchPopulated && !startDatePassed">Edit Match</button>
-    <div class="alert alert-danger" ng-show="emptyResult">
-        You have to enter every result.
-    </div>
     <div class="col-xs-12">
         <table ng-show="logList.length > 0 && viewLog" width="100%">
             <thead>
@@ -59,7 +57,7 @@
             </tr>
             </tbody>
         </table>
-        <table ng-show="teamList.length > 0 && !viewMatch && !viewLog" width="100%">
+        <table ng-show="teamList.length > 0 && viewCurrent" width="100%">
             <thead>
             <th>
                 Team Name
@@ -79,7 +77,27 @@
             </tr>
             </tbody>
         </table>
-        <table ng-show="matchList.length > 0 && viewMatch && !viewLog" width="100%">
+        <table ng-show="teamScoreList.length > 0 && !viewMatch && !viewLog && !viewCurrent" width="100%">
+            <thead>
+            <th>
+                Team Name
+            </th>
+            <th>
+                Score
+            </th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="team in teamScoreList">
+                <td>
+                    {{team.teamName}}
+                </td>
+                <td>
+                    {{team.score}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table ng-show="matchList.length > 0 && viewMatch && !viewLog && !viewCurrent" width="100%">
             <thead>
             <th>
                 Week
@@ -112,13 +130,16 @@
                     {{match.teamName2}}
                 </td>
                 <td>
-                    <select ng-change="updateMatchDTO(resultOptions, match)" ng-show="officialLogin && !resultConfirm && validateDate" ng-model="resultOptions">
+                    <select ng-change="updateMatchDTO(resultOptions, match)" ng-show="officialLogin && validateDate && !match.confirmed" ng-model="resultOptions">
                         <option>{{match.teamName1}}</option>
                         <option>{{match.teamName2}}</option>
                         <option value="Tied">Tied</option>
                         <option ng-show = "weekSelected < 7" value="Reschedule">Reschedule</option>
                     </select>
-                    <div ng-show="!officialLogin || resultConfirm">
+                    <div ng-show="!officialLogin && !match.confirmed">
+                        No Result
+                    </div>
+                    <div ng-show="!officialLogin || match.confirmed">
                         {{match.result}}
                     </div>
                 </td>

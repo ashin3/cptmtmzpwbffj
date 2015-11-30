@@ -121,6 +121,7 @@ public class MatchController {
     public void updateMatch(@RequestParam String matchId, String result) {
         Match match = matchDao.findByMatchId(matchId.replace("\"", ""));
         match.setResult(result);
+        match.setConfirmed(true);
         matchDao.save(match);
     }
 
