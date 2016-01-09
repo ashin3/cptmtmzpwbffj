@@ -40,10 +40,15 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
     $scope.sortType = "score";
     $scope.sortReverse = true;
     $scope.searchScore = "";
+    $scope.editResult = false;
+    $scope.updatingResult = false;
 
     $scope.resultConfirm = false;
+    $scope.disableEditButton = false;
 
     $scope.weekList = [1,2,3,4,5,6,7,8];
+
+    $scope.disableConfirmButton = false;
 
     $scope.createTeamScoreList = function(weekSelected) {
         $http({
@@ -177,6 +182,7 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                     $scope.matchList.push(data[i]);
                     if(data[i].result == null) {
                         $scope.resultConfirm = false;
+                        $scope.editResult = false;
                     }
                 }
                 $scope.createTeamScoreList(weekSelected);
@@ -211,6 +217,8 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
             });
             $scope.validateDatePassed(weekSelected);
         }
+        $scope.editResult = false;
+        $scope.updatingResult = false;
         $scope.viewLog = false;
         $scope.viewingSchedule = true;
         $scope.viewCurrent = false;
@@ -260,6 +268,8 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
             }).success(function(data) {
                 $scope.resultView = true;
                 $scope.viewMatch = false;
+                $scope.editResult = false;
+                $scope.updatingResult = false;
                 $scope.teamList = [];
                 for (var i=0; i<data.length; i++) {
                     $scope.teamList.push(data[i])
@@ -302,6 +312,8 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                     leagueName : $rootScope.officialLeague
                 }
             }).success(function(data) {
+                $scope.editResult = false;
+                $scope.updatingResult = false;
                 $scope.resultView = true;
                 $scope.viewMatch = false;
                 $scope.teamList = [];
@@ -385,6 +397,8 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                 }
             })
         }
+        $scope.editResult = false;
+        $scope.updatingResult = false;
         $scope.viewCurrent = true;
         $scope.viewLog = false;
     };
@@ -435,6 +449,7 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                             leagueName : leagueName,
                             teamNames : $scope.teamNameListForReschedule
                         }
+                    }).success(function() {
                     });
                 }
             }
@@ -454,9 +469,11 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                     weeklyScore : weeklyScoreMapList[teamNameList[i]],
                     week : weekSelected
                 }
-            }).success(function(data) {
+            }).success(function() {
             });
         }
+        $scope.disableConfirmButton = false;
+        $scope.disableEditButton = false;
     };
 
     $scope.createLog = function(matchList, weekSelected) {
@@ -477,7 +494,26 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
         }
     };
 
+    $scope.editLog = function(matchList, weekSelected) {
+        for(var i = 0; i<matchList.length; i++) {
+            if(matchList[i].result != null && matchList[i].result != "") {
+                $http({
+                    url: logUrlBase + "/editMatchLog",
+                    method:"POST",
+                    params: {
+                        leagueName : $rootScope.officialLeague,
+                        officialName : $rootScope.officialName,
+                        teamName1 : matchList[i].teamName1,
+                        teamName2 : matchList[i].teamName2,
+                        week : weekSelected
+                    }
+                })
+            }
+        }
+    };
+
     $scope.updateResult = function(matchList, weekSelected) {
+        $scope.disableConfirmButton = true;
         $scope.updateMatch(matchList);
         $scope.updateScore($rootScope.officialLeague, matchList, weekSelected);
         $scope.createLog(matchList, weekSelected);
@@ -496,6 +532,11 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
         $scope.viewSchedule($scope.leagueList[0], weekSelected);
     };
 
+    $scope.editingResult = function(weekSelected) {
+        $scope.updatingResult = true;
+        $scope.updateMatchPopulateArray(weekSelected);
+    };
+
     $scope.populateLog = function() {
         $http({
             url: logUrlBase + "/findAllLogsByLeagueName",
@@ -504,10 +545,89 @@ home.controller('HomeCtrl', function($rootScope, $scope, $http, $cookieStore, $l
                 leagueName: $rootScope.officialLeague
             }
         }).success(function(data) {
+            $scope.editResult = false;
+            $scope.updatingResult = false;
             $scope.viewLog = true;
             $scope.viewCurrent = false;
             $scope.logList = data;
         });
+    };
+    $scope.updateMatchPopulateArray = function(weekSelected) {
+        $http({
+            url:teamUrlBase + "/findByLeagueName",
+            method: "GET",
+            params: {
+                leagueName : $rootScope.officialLeague
+            }
+        }).success(function(data) {
+            $scope.teamScoreMapList = {};
+            $scope.weeklyScoreMapList = {};
+            $scope.teamNameList = [];
+            for (var i=0; i<data.length; i++) {
+                $scope.teamScoreMapList[data[i].teamName] = data[i].score;
+                $scope.teamNameList.push(data[i].teamName);
+                switch(weekSelected) {
+                    case 1:
+                        $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                        $scope.teamScoreMapList[data[i].teamName] = $scope.teamScoreMapList[data[i].teamName]-data[i].week1;
+                        break;
+                    case 2:
+                        $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                        $scope.teamScoreMapList[data[i].teamName] = $scope.teamScoreMapList[data[i].teamName]-data[i].week2;
+                        break;
+                    case 3:
+                        $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                        $scope.teamScoreMapList[data[i].teamName] = $scope.teamScoreMapList[data[i].teamName]-data[i].week3;
+                        break;
+                    case 4:
+                        $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                        $scope.teamScoreMapList[data[i].teamName] = $scope.teamScoreMapList[data[i].teamName]-data[i].week4;
+                        break;
+                    case 5:
+                        $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                        $scope.teamScoreMapList[data[i].teamName] = $scope.teamScoreMapList[data[i].teamName]-data[i].week5;
+                        break;
+                    case 6:
+                        $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                        $scope.teamScoreMapList[data[i].teamName] = $scope.teamScoreMapList[data[i].teamName]-data[i].week6;
+                        break;
+                    case 7:
+                        $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                        $scope.teamScoreMapList[data[i].teamName] = $scope.teamScoreMapList[data[i].teamName]-data[i].week7;
+                        break;
+                    case 8:
+                        $scope.weeklyScoreMapList[data[i].teamName] = 0;
+                        $scope.teamScoreMapList[data[i].teamName] = $scope.teamScoreMapList[data[i].teamName]-data[i].week8;
+                        break;
+                }
+            }
+        });
+    };
+
+    $scope.editAndUpdate = function(matchList, weekSelected) {
+        $scope.disableEditButton = true;
+        $scope.updateMatch(matchList);
+        for(var i=0; i<matchList.length; i++) {
+            if(matchList[i].result == "Tied") {
+                $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 3;
+                $scope.teamScoreMapList[matchList[i].teamName2] = $scope.teamScoreMapList[matchList[i].teamName2] + 3;
+                $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.weeklyScoreMapList[matchList[i].teamName1] + 3;
+                $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 3;
+            } else if(matchList[i].result == matchList[i].teamName1 || matchList[i].result == matchList[i].teamName2) {
+                $scope.teamScoreMapList[matchList[i].result] = $scope.teamScoreMapList[matchList[i].result] + 5;
+                $scope.weeklyScoreMapList[matchList[i].result] = $scope.weeklyScoreMapList[matchList[i].result] + 5;
+                if(matchList[i].result == matchList[i].teamName1) {
+                    $scope.teamScoreMapList[matchList[i].teamName2] = $scope.teamScoreMapList[matchList[i].teamName2] + 1;
+                    $scope.weeklyScoreMapList[matchList[i].teamName2] = $scope.weeklyScoreMapList[matchList[i].teamName2] + 1;
+                } else {
+                    $scope.teamScoreMapList[matchList[i].teamName1] = $scope.teamScoreMapList[matchList[i].teamName1] + 1;
+                    $scope.weeklyScoreMapList[matchList[i].teamName1] = $scope.weeklyScoreMapList[matchList[i].teamName1] + 1;
+                }
+            }
+        }
+        $scope.updateTeam($rootScope.officialLeague, $scope.teamNameList, $scope.teamScoreMapList, $scope.weeklyScoreMapList, weekSelected);
+        $scope.editLog(matchList, weekSelected);
+        $scope.viewSchedule($rootScope.officialLeague, weekSelected);
     };
 
     $scope.populateSchedule = function() {

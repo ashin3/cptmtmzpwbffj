@@ -41,6 +41,20 @@ public class LogController {
         logDao.save(log);
     }
 
+    @RequestMapping(value = "/editMatchLog")
+    @ResponseBody
+    public void editMatchLog(@RequestParam String leagueName,
+                               String officialName,
+                               String teamName1,
+                               String teamName2,
+                               int week) {
+        String activity;
+        Log log;
+        activity = "Edited Result for Week " + week + " Match for " + teamName1 + " : " + teamName2;
+        log = new Log(leagueName, officialName, activity);
+        logDao.save(log);
+    }
+
     @RequestMapping(value = "/deleteByLeagueName")
     @ResponseBody
     public void deleteByLeagueName(@RequestParam String leagueName) {

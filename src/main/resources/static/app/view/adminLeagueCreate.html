@@ -10,6 +10,7 @@
         <div class="col-sm-3">
             <input type="text" ng-model="leagueName" class="form-control" id="leagueName" placeholder="Enter League Name">
         </div>
+        <label>League Name Must Be Unique</label>
     </div>
     <div class="row">
         <div class="col-sm-3">
@@ -20,6 +21,7 @@
                     <h4> Official {{$index+1}} :
                         <button class="btn btn-primary" ng-show="$index>0" type="button" ng-click="removeOfficial($index)">Remove</button>
                     </h4>
+                    <label>Username and Password Cannot Contain Any Space.</label>
                     <label>name : </label><input type="text" ng-model="official.name" name="" placeholder="Enter a Official Name" class="form-control">
                     <label>username : </label><input type="text" ng-model="official.username" name="" placeholder="Enter a Official Username" class="form-control">
                     <label>password : </label><input type="text" ng-model="official.password" name="" placeholder="Enter a Official Password" class="form-control">

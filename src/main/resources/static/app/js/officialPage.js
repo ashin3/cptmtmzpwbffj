@@ -37,6 +37,9 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
 
     $scope.emptyTeamList = [{name:""}, {name:""}];
     $scope.teamList = [];
+    $scope.populateMatchButtonDisabled = false;
+    $scope.updateMatchButtonDisabled = false;
+
 
     if($rootScope.matchUpdated) {
         $http({
@@ -111,6 +114,8 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
                 }
             }
         ).success(function() {
+                $scope.updateMatchButtonDisabled = false;
+                $scope.populateMatchButtonDisabled = false;
                 $location.path("/home")
             })
     };
@@ -120,9 +125,11 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
     $scope.dateError = true;
 
     $scope.populateMatch = function populateMatch() {
+        $scope.populateMatchButtonDisabled = true;
         if($scope.teams[0].name == "" || $scope.teams[1].name =="" || $scope.startDate == null || $scope.startDate.length<1) {
             $scope.emptyResult = false;
             $scope.dateError = true;
+            $scope.populateMatchButtonDisabled = false;
         } else {
             $scope.emptyResult = true;
             $scope.dateError = true;
@@ -133,9 +140,11 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
                 var today = new Date();
                 if(isNaN( f.getTime())) {
                     $scope.dateError = false;
+                    $scope.populateMatchButtonDisabled = false;
                 } else {
                     if(f.getTime() < today.getTime()) {
                         $scope.dateError = false;
+                        $scope.populateMatchButtonDisabled = false;
                     } else {
                         $scope.updateLeague();
                         $scope.teams.forEach(function(team) {
@@ -153,6 +162,7 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
                 }
             } else {
                 $scope.dateError = false;
+                $scope.populateMatchButtonDisabled = false;
             }
         }
 
@@ -179,9 +189,11 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
     };
 
     $scope.updateMatch = function updateMatch() {
+        $scope.updateMatchButtonDisabled = true;
         if($scope.teams[0].name == "" || $scope.teams[1].name =="" || $scope.startDate == null || $scope.startDate.length<1) {
             $scope.emptyResult = false;
             $scope.dateError = true;
+            $scope.updateMatchButtonDisabled = false;
         } else {
             $scope.emptyResult = true;
             $scope.dateError = true;
@@ -192,9 +204,11 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
                 var today = new Date();
                 if(isNaN( f.getTime())) {
                     $scope.dateError = false;
+                    $scope.updateMatchButtonDisabled = false;
                 } else {
                     if(f.getTime() < today.getTime()) {
                         $scope.dateError = false;
+                        $scope.updateMatchButtonDisabled = false;
                     } else {
                         $scope.deleteTeamByLeagueName();
                         $scope.deleteMatchByLeagueName();
@@ -214,9 +228,10 @@ official.controller('OfficialCtrl', function($rootScope, $scope, $http, $locatio
                 }
             } else {
                 $scope.dateError = false;
+                $scope.updateMatchButtonDisabled = false;
             }
         }
-    }
+    };
 
     $scope.createLog = function(logType) {
         $http({

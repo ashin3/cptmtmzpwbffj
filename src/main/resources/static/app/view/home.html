@@ -130,16 +130,16 @@
                     {{match.teamName2}}
                 </td>
                 <td>
-                    <select ng-change="updateMatchDTO(resultOptions, match)" ng-show="officialLogin && validateDate && !match.confirmed" ng-model="resultOptions">
-                        <option>{{match.teamName1}}</option>
-                        <option>{{match.teamName2}}</option>
+                    <select ng-init="resultOptions=match.result" ng-change="updateMatchDTO(resultOptions, match)" ng-show="(officialLogin && validateDate && !match.confirmed) || (updatingResult && !(match.result=='Reschedule'))" ng-model="resultOptions">
+                        <option value="{{match.teamName1}}">{{match.teamName1}}</option>
+                        <option value="{{match.teamName2}}">{{match.teamName2}}</option>
                         <option value="Tied">Tied</option>
-                        <option ng-show = "weekSelected < 7" value="Reschedule">Reschedule</option>
+                        <option ng-show = "weekSelected < 7 && !updatingResult" value="Reschedule">Reschedule</option>
                     </select>
-                    <div ng-show="!officialLogin && !match.confirmed">
+                    <div ng-show="!officialLogin && !match.confirmed && !updatingResult">
                         No Result
                     </div>
-                    <div ng-show="!officialLogin || match.confirmed">
+                    <div ng-show="(!officialLogin || match.confirmed) && (!updatingResult || (match.result=='Reschedule'))">
                         {{match.result}}
                     </div>
                 </td>
@@ -149,6 +149,9 @@
     </div>
 
     <div>
-        <button ng-show="viewMatch && officialLogin && !resultConfirm && matchList.length > 0 && !viewLog && validateDate" class="btn btn-primary" ng-click="updateResult(matchList, weekSelected)">Confirm Matches</button>
+        <button ng-disabled="disableConfirmButton" ng-show="viewMatch && officialLogin && !resultConfirm && matchList.length > 0 && !viewLog && validateDate" class="btn btn-primary" ng-click="updateResult(matchList, weekSelected)">Confirm Matches</button>
+        <button ng-show="viewMatch && officialLogin && resultConfirm && matchList.length > 0 && !viewLog && validateDate && !updatingResult" class="btn btn-primary" ng-click="editingResult(weekSelected)">Edit Matches</button>
+        <button ng-disabled="disableEditButton" ng-show="updatingResult" class="btn btn-primary" ng-click="updatingResult=false">Cancel Update</button>
+        <button ng-disabled="disableEditButton" ng-show="updatingResult" class="btn btn-primary" ng-click="editAndUpdate(matchList, weekSelected)">Update Matches</button>
     </div>
 </div>

@@ -25,10 +25,10 @@
         <h2>Start Date   <input  type="text" value="startDate" ng-model="startDate" placeholder="MM/DD/YYYY" >
         </h2>
     </div>
-    <button ng-show="!matchUpdated" ng-click="populateMatch()" class="btn btn-primary" type="button">
+    <button ng-disabled="populateMatchButtonDisabled" ng-show="!matchUpdated" ng-click="populateMatch()" class="btn btn-primary" type="button">
         POPULATE MATCH
     </button>
-    <button ng-show="matchUpdated" ng-click="updateMatch()" class="btn btn-primary" type="button">
+    <button ng-disabled="updateMatchButtonDisabled" ng-show="matchUpdated" ng-click="updateMatch()" class="btn btn-primary" type="button">
         UPDATE MATCH
     </button>
 </div>
